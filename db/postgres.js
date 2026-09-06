@@ -19,6 +19,12 @@ async function init() {
       num  BIGINT NOT NULL DEFAULT 0
     );
   `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS tb_allow (
+      name VARCHAR(32) PRIMARY KEY,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+  `);
 }
 
 const initPromise = init();
@@ -73,9 +79,35 @@ async function setNumMulti(counters) {
   );
 }
 
+// ---- tb_allow (counter name whitelist) ----
+function allowGetAll() {
+  return initPromise.then(() =>
+    pool.query("SELECT name FROM tb_allow ORDER BY name").then((res) => res.rows.map((r) => r.name))
+  );
+}
+
+function allowAdd(name) {
+  return initPromise.then(() =>
+    pool.query(
+      `INSERT INTO tb_allow (name) VALUES ($1)
+       ON CONFLICT (name) DO NOTHING`,
+      [name]
+    )
+  );
+}
+
+function allowRemove(name) {
+  return initPromise.then(() =>
+    pool.query("DELETE FROM tb_allow WHERE name = $1", [name])
+  );
+}
+
 module.exports = {
   getNum,
   getAll,
   setNum,
   setNumMulti,
+  allowGetAll,
+  allowAdd,
+  allowRemove,
 };

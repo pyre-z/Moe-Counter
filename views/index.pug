@@ -1,4 +1,4 @@
-html
+html(lang=lang)
   head
     title='Moe Counter!'
     meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
@@ -25,88 +25,101 @@ html
       }
 
     script.
-      var __global_data = { site: "#{site}" };
+      var __global_data = { site: "#{site}", lang: "#{lang}" };
 
   body
+    .lang-switch
+      a(href=`/?lang=${altLang}`, onclick='_evt_push("click", "normal", "switch_lang")')= altLang === 'zh' ? '中文' : 'English'
+
     h1#main_title
       i Moe Counter!
 
-    h3 How to use
-    p Set a unique id for your counter, replace 
+    h3= t.how_to_use
+    p
+      span= t.how_to_use_desc_prefix
       code :name
-      |  in the url, That's it!
+      span= t.how_to_use_desc_suffix
 
-    h5 SVG address
+    h5= t.svg_address
     code #{site}/@:name
 
-    h5 Img tag
+    h5= t.img_tag
     code &lt;img src="#{site}/@:name" alt=":name" />
 
-    h5 Markdown
+    h5= t.markdown
     code ![:name](#{site}/@:name)
 
-    h5 e.g.
+    h5= t.eg
       img(src=`${site}/@index` alt="Moe Counter!")
 
     details#themes
       summary#more_theme(onclick='_evt_push("click", "normal", "more_theme")')
-        h3 More theme✨
-      p Just use the query parameters <code>theme</code>, like this: <code>#{site}/@:name?theme=moebooru</code>
+        h3= t.more_theme
+      p
+        span= t.more_theme_desc_1
+        code theme
+        span= t.more_theme_desc_2
+        code #{site}/@:name?theme=moebooru
       each theme in Object.keys(themeList)
         div.item(data-theme=theme)
           h5 #{theme}
           img(data-src=`${site}/@demo?theme=${theme}` alt=theme)
 
-    h3 Credits
+    h3= t.credits
     ul
       li: a(href='https://space.bilibili.com/703007996', target='_blank', title='A-SOUL_Official') A-SOUL
       li: a(href='https://github.com/moebooru/moebooru', target='_blank', rel='nofollow') moebooru
       li
         a(href='javascript:alert("!!! NSFW LINK !!!\\nPlease enter the url manually")') gelbooru.com
-        |  NSFW
+        |  #{t.nsfw}
       li: a(href='https://icons8.com/icon/80355/star', target='_blank', rel='nofollow') Icons8
-      span: i And all booru site...
+      span: i= t.all_booru
 
-    h3 Tool
+    h3= t.tool
     .tool
       table
         thead
           tr
-            th Param
-            th Description
-            th Value
+            th= t.param
+            th= t.description
+            th= t.value
         tbody
           tr
             td: code name
-            td Unique counter name
+            td= t.name_desc
             td: input#name(type='text', placeholder=':name')
           tr
             td: code theme
-            td Select a counter image theme, default is 
+            td
+              span= t.theme_desc_prefix
               code moebooru
             td
               select#theme
-                option(value="random", selected) * random
+                option(value="random", selected) * #{t.random}
                 each theme in Object.keys(themeList)
                   option(value=theme) #{theme}
           tr
             td: code padding
-            td Set the minimum length, between 1-16, default is 
+            td
+              span= t.padding_desc_prefix
               code 7
             td: input#padding(type='number', value='7', min='1', max='32', step='1', oninput='this.value = this.value.replace(/[^0-9]/g, "")')
           tr
             td: code offset
-            td Set the offset pixel value, between -500-500, default is 
+            td
+              span= t.offset_desc_prefix
               code 0
             td: input#offset(type='number', value='0', min='-500', max='500', step='1', oninput='this.value = this.value.replace(/[^0-9|\-]/g, "")')
           tr
             td: code scale
-            td Set the image scale, between 0.1-2, default is 
+            td
+              span= t.scale_desc_prefix
               code 1
             td: input#scale(type='number', value='1', min='0.1', max='2', step='0.1', oninput='this.value = this.value.replace(/[^0-9|\.]/g, "")')
           tr
             td: code align
-            td Set the image align, Enum top/center/bottom, default is 
+            td
+              span= t.align_desc_prefix
               code top
             td: select#align(name="align")
                 option(value="top", selected) top
@@ -114,40 +127,43 @@ html
                 option(value="bottom") bottom
           tr
             td: code pixelated
-            td Enable pixelated mode, Enum 0/1, default is 
+            td
+              span= t.pixelated_desc_prefix
               code 1
             td
               input#pixelated(type='checkbox', role='switch', checked)
               label(for='pixelated'): span
           tr
             td: code darkmode
-            td Enable dark mode, Enum 0/1/auto, default is 
+            td
+              span= t.darkmode_desc_prefix
               code auto
             td: select#darkmode(name="darkmode")
                 option(value="auto", selected) auto
-                option(value="1") yes
-                option(value="0") no
+                option(value="1") #{t.yes}
+                option(value="0") #{t.no}
           tr
             td(colspan=3)
-              h4.caption Unusual Options
+              h4.caption= t.unusual_options
           tr
             td: code num
-            td Set counter display number, 0 for disable, default is 
+            td
+              span= t.num_desc_prefix
               code 0
             td: input#num(type='number', value='0', min='0', max='1e15', step='1', oninput='this.value = this.value.replace(/[^0-9]/g, "")')
           tr
             td: code prefix
-            td Set the prefix number, empty for disable
+            td= t.prefix_desc
             td: input#prefix(type='number', value='', min='0', max='999999', step='1', oninput='this.value = this.value.replace(/[^0-9]/g, "")')
 
-      button#get(onclick='_evt_push("click", "normal", "get_counter")') Generate
+      button#get(onclick='_evt_push("click", "normal", "get_counter")')= t.generate
 
       div
         code#code
         img#result
 
     p.github
-      a(href='https://github.com/pyre-z/Moe-Counter', target='_blank', onclick='_evt_push("click", "normal", "go_github")') source code
+      a(href='https://github.com/pyre-z/Moe-Counter', target='_blank', onclick='_evt_push("click", "normal", "go_github")')= t.source_code
 
     div.back-to-top
 

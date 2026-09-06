@@ -10,25 +10,89 @@ const { themeList, getCountImage } = require("./utils/themify");
 const { cors, ZodValid } = require("./utils/middleware");
 const { randomArray, logger } = require("./utils");
 
+// ---- i18n (server-side, lightweight) ----
+const locales = {
+  zh: require("./locales/zh.json"),
+  en: require("./locales/en.json"),
+};
+const DEFAULT_LANG = "zh";
+const SUPPORTED_LANGS = Object.keys(locales);
+
+function pickLang(req) {
+  // 1. explicit ?lang=
+  const q = String(req.query.lang || "").toLowerCase();
+  if (SUPPORTED_LANGS.includes(q)) return q;
+  // 2. Accept-Language header (zh first)
+  const accept = String(req.get("Accept-Language") || "");
+  for (const part of accept.split(",")) {
+    const code = part.split(";")[0].trim().toLowerCase().slice(0, 2);
+    if (SUPPORTED_LANGS.includes(code)) return code;
+  }
+  // 3. default
+  return DEFAULT_LANG;
+}
+
 const app = express();
 
 app.use(express.static("assets"));
 app.use(compression());
 app.use(cors());
+app.use(express.json());
 app.set("view engine", "pug");
+
+// ---- Counter name whitelist (tb_allow) ----
+// If ADMIN_TOKEN is set, access control is ENABLED:
+//   only names listed in tb_allow (plus the "demo" counter used by the
+//   homepage theme preview) may be requested. Anything else -> 404.
+// If ADMIN_TOKEN is NOT set, whitelist is DISABLED (any name allowed,
+// upstream behavior) and admin routes are unreachable.
+const adminToken = process.env.ADMIN_TOKEN || "";
+const whitelistEnabled = adminToken.length > 0;
+
+// In-memory cache of allowed names (hot path: no DB hit per request).
+let allowedNames = new Set();
+
+async function reloadAllowed() {
+  const list = await db.allowGetAll();
+  allowedNames = new Set(list);
+  logger.info("Allowed counter names:", list.join(", ") || "(empty)");
+}
+
+function nameAllowed(req, res, next) {
+  if (!whitelistEnabled) return next();
+  const { name } = req.params;
+  if (name === "demo" || allowedNames.has(name)) return next();
+  return res.status(404).send("Not Found");
+}
+
+function authAdmin(req, res, next) {
+  if (!whitelistEnabled) return res.status(404).send("Not Found");
+  const auth = req.get("Authorization") || "";
+  if (auth !== `Bearer ${adminToken}`) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  next();
+}
 
 app.get('/', (req, res) => {
   const site = process.env.APP_SITE || `${req.protocol}://${req.get('host')}`
   const ga_id = process.env.GA_ID || null
+  const lang = pickLang(req)
+  const t = locales[lang]
+  const altLang = lang === 'zh' ? 'en' : 'zh'
   res.render('index', {
     site,
     ga_id,
     themeList,
+    lang,
+    t,
+    altLang,
   })
 });
 
 // get the image
 app.get(["/@:name", "/get/@:name"],
+  nameAllowed,
   ZodValid({
     params: z.object({
       name: z.string().max(32),
@@ -87,7 +151,7 @@ app.get(["/@:name", "/get/@:name"],
 );
 
 // JSON record
-app.get("/record/@:name", async (req, res) => {
+app.get("/record/@:name", nameAllowed, async (req, res) => {
   const { name } = req.params;
 
   const data = await getCountByName(name);
@@ -101,8 +165,55 @@ app.get("/heart-beat", (req, res) => {
   logger.debug("heart-beat");
 });
 
-const listener = app.listen(process.env.APP_PORT || 3000, () => {
+// ---- Admin: manage whitelist (only when ADMIN_TOKEN is set) ----
+app.get("/admin", (req, res) => {
+  if (!whitelistEnabled) return res.status(404).send("Not Found");
+  res.sendFile("admin.html", { root: __dirname });
+});
+
+app.get("/admin/allow", authAdmin, async (req, res) => {
+  try {
+    res.json({ names: [...allowedNames].sort() });
+  } catch (e) {
+    res.status(500).json({ error: String(e) });
+  }
+});
+
+app.post("/admin/allow/:name", authAdmin, async (req, res) => {
+  try {
+    const name = String(req.params.name || "").trim();
+    if (!name || name.length > 32) {
+      return res.status(400).json({ error: "Invalid name (1-32 chars)" });
+    }
+    if (name === "demo") {
+      return res.status(400).json({ error: "demo is always allowed" });
+    }
+    await db.allowAdd(name);
+    await reloadAllowed();
+    res.json({ ok: true, names: [...allowedNames].sort() });
+  } catch (e) {
+    res.status(500).json({ error: String(e) });
+  }
+});
+
+app.delete("/admin/allow/:name", authAdmin, async (req, res) => {
+  try {
+    const name = String(req.params.name || "").trim();
+    await db.allowRemove(name);
+    await reloadAllowed();
+    res.json({ ok: true, names: [...allowedNames].sort() });
+  } catch (e) {
+    res.status(500).json({ error: String(e) });
+  }
+});
+
+const listener = app.listen(process.env.APP_PORT || 3000, async () => {
   logger.info("Your app is listening on port " + listener.address().port);
+  try {
+    await reloadAllowed();
+  } catch (e) {
+    logger.error("Failed to load allowed names:", e);
+  }
 });
 
 let __cache_counter = {};

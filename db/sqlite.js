@@ -13,6 +13,11 @@ db.exec(`CREATE TABLE IF NOT EXISTS tb_count (
                        UNIQUE,
     num   BIGINT       NOT NULL
                        DEFAULT (0) 
+);
+
+CREATE TABLE IF NOT EXISTS tb_allow (
+    name VARCHAR (32) NOT NULL PRIMARY KEY,
+    created_at DATETIME NOT NULL DEFAULT (datetime('now'))
 );`)
 
 function getNum(name) {
@@ -61,9 +66,34 @@ function setNumMulti(counters) {
   })
 }
 
+// ---- tb_allow (counter name whitelist) ----
+function allowGetAll() {
+  return new Promise((resolve) => {
+    const stmt = db.prepare('SELECT `name` FROM tb_allow ORDER BY `name`')
+    resolve(stmt.all().map((r) => r.name))
+  })
+}
+
+function allowAdd(name) {
+  return new Promise((resolve) => {
+    db.exec('INSERT INTO tb_allow(`name`) VALUES($name) ON CONFLICT(`name`) DO NOTHING', { $name: name })
+    resolve()
+  })
+}
+
+function allowRemove(name) {
+  return new Promise((resolve) => {
+    db.exec('DELETE FROM tb_allow WHERE `name` = $name', { $name: name })
+    resolve()
+  })
+}
+
 module.exports = {
   getNum,
   getAll,
   setNum,
-  setNumMulti
+  setNumMulti,
+  allowGetAll,
+  allowAdd,
+  allowRemove
 }

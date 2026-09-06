@@ -16,6 +16,15 @@ mongoose.connect(mongodbURL);
 
 const Count = mongoose.connection.model("Count", schema);
 
+const allowSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    created_at: { type: Date, default: Date.now }
+  },
+  { collection: 'tb_allow', versionKey: false }
+);
+const Allow = mongoose.connection.model("Allow", allowSchema);
+
 function getNum(name) {
   return Count.findOne({ name }, "-_id -__v").exec();
 }
@@ -47,9 +56,29 @@ function setNumMulti(counters) {
   return Count.bulkWrite(bulkOps, { ordered: false });
 }
 
+// ---- tb_allow (counter name whitelist) ----
+function allowGetAll() {
+  return Allow.find({}, "-_id -__v").exec().then((rows) => rows.map((r) => r.name));
+}
+
+function allowAdd(name) {
+  return Allow.findOneAndUpdate(
+    { name },
+    { name },
+    { upsert: true, setDefaultsOnInsert: true }
+  ).exec();
+}
+
+function allowRemove(name) {
+  return Allow.deleteOne({ name }).exec();
+}
+
 module.exports = {
   getNum,
   getAll,
   setNum,
   setNumMulti,
+  allowGetAll,
+  allowAdd,
+  allowRemove,
 };
