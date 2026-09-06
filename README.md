@@ -1,358 +1,185 @@
-# *Moe Counter!*
+# Moe Counter! - 多种风格可选的萌萌计数器
 
-多种风格可选的萌萌计数器
+> 🌐 [中文](./README.md) | [English](./README.en.md)
 
-<p align="center">
-  <a href="https://count.getloli.com" target="_blank">
-    <img alt="Moe Counter!" src="https://count.getloli.com/@Moe-counter.github?name=Moe-counter.github&theme=booru-lewd&padding=7&offset=0&align=top&scale=1&pixelated=1&darkmode=auto">
-  </a>
-</p>
+**Moe Counter!** 是一个可自托管的图片计数器徽章服务：每次请求自动 +1，并把计数渲染为可爱的图片徽章，适合放在个人博客、GitHub README 或个人主页中。
+
+本仓库是 [journey-ad/Moe-Counter](https://github.com/journey-ad/Moe-Counter) 的 fork，在保留上游全部主题与功能的基础上，新增了 **PostgreSQL 存储支持**与一套可直接使用的 **Docker Compose 生产部署配置**。
 
 <p align="center">
-  <a href="https://hellogithub.com/repository/ed741b376efe46789ce9bb140ac19a52" target="_blank">
-   <picture>
-     <source media="(prefers-color-scheme: dark)" srcset="https://api.hellogithub.com/v1/widgets/recommend.svg?rid=ed741b376efe46789ce9bb140ac19a52&claim_uid=NyJh2Vejq3984f5&theme=dark" />
-     <source media="(prefers-color-scheme: light)" srcset="https://api.hellogithub.com/v1/widgets/recommend.svg?rid=ed741b376efe46789ce9bb140ac19a52&claim_uid=NyJh2Vejq3984f5&theme=neutral" />
-     <img src="https://api.hellogithub.com/v1/widgets/recommend.svg?rid=ed741b376efe46789ce9bb140ac19a52&claim_uid=NyJh2Vejq3984f5&theme=neutral" alt="Featured｜HelloGitHub" style="width: 250px; height: 54px;" width="250" height="54" />
-   </picture>
-  </a>
+  <img alt="Moe Counter!" src="https://count.pyre-z.me/@Moe-counter.github?name=Moe-counter.github&theme=moebooru&padding=7&offset=0&align=top&scale=1&pixelated=1&darkmode=auto">
 </p>
 
-<details>
-<summary><h2>More theme</h2></summary>
-
-### *[Contribute themes is welcome!](https://github.com/journey-ad/Moe-Counter/issues/new?assignees=&labels=theme&projects=&template=contribute-theme.yml&title=%5BTheme%5D%3A+)*
-
-##### 3d-num
-
-![3d-num](https://count.getloli.com/@demo?theme=3d-num)
-
-##### ai-1
-
-![ai-1](https://count.getloli.com/@demo?theme=ai-1)
-
-##### asoul
-
-![asoul](https://count.getloli.com/@demo?theme=asoul)
-
-##### booru-ffsr
-
-![booru-ffsr](https://count.getloli.com/@demo?theme=booru-ffsr)
-
-##### booru-helltaker
-
-![booru-helltaker](https://count.getloli.com/@demo?theme=booru-helltaker)
-
-##### booru-huggboo
-
-![booru-huggboo](https://count.getloli.com/@demo?theme=booru-huggboo)
-
-##### booru-jaypee
-
-![booru-jaypee](https://count.getloli.com/@demo?theme=booru-jaypee)
-
-##### booru-koe
-
-![booru-koe](https://count.getloli.com/@demo?theme=booru-koe)
-
-##### booru-lewd
-
-![booru-lewd](https://count.getloli.com/@demo?theme=booru-lewd)
-
-##### booru-lisu
-
-![booru-lisu](https://count.getloli.com/@demo?theme=booru-lisu)
-
-##### booru-mjg
-
-![booru-mjg](https://count.getloli.com/@demo?theme=booru-mjg)
-
-##### booru-mof
-
-![booru-mof](https://count.getloli.com/@demo?theme=booru-mof)
-
-##### booru-nandroid
-
-![booru-nandroid](https://count.getloli.com/@demo?theme=booru-nandroid)
-
-##### booru-qualityhentais
-
-![booru-qualityhentais](https://count.getloli.com/@demo?theme=booru-qualityhentais)
-
-##### booru-r6gdrawfriends
-
-![booru-r6gdrawfriends](https://count.getloli.com/@demo?theme=booru-r6gdrawfriends)
-
-##### booru-rfck
-
-![booru-rfck](https://count.getloli.com/@demo?theme=booru-rfck)
-
-##### booru-smtg
-
-![booru-smtg](https://count.getloli.com/@demo?theme=booru-smtg)
-
-##### booru-snyde
-
-![booru-snyde](https://count.getloli.com/@demo?theme=booru-snyde)
-
-##### booru-the-collection
-
-![booru-the-collection](https://count.getloli.com/@demo?theme=booru-the-collection)
-
-##### booru-touhoulat
-
-![booru-touhoulat](https://count.getloli.com/@demo?theme=booru-touhoulat)
-
-##### booru-townofgravityfalls
-
-![booru-townofgravityfalls](https://count.getloli.com/@demo?theme=booru-townofgravityfalls)
-
-##### booru-twifanartsfw
-
-![booru-twifanartsfw](https://count.getloli.com/@demo?theme=booru-twifanartsfw)
-
-##### booru-ve
-
-![booru-ve](https://count.getloli.com/@demo?theme=booru-ve)
-
-##### booru-vivi
-
-![booru-vivi](https://count.getloli.com/@demo?theme=booru-vivi)
-
-##### booru-vp
-
-![booru-vp](https://count.getloli.com/@demo?theme=booru-vp)
-
-##### booru-yuyuyui
-
-![booru-yuyuyui](https://count.getloli.com/@demo?theme=booru-yuyuyui)
-
-##### capoo-1
-
-![capoo-1](https://count.getloli.com/@demo?theme=capoo-1)
-
-##### capoo-2
-
-![capoo-2](https://count.getloli.com/@demo?theme=capoo-2)
-
-##### e621
-
-![e621](https://count.getloli.com/@demo?theme=e621)
-
-##### food
-
-![food](https://count.getloli.com/@demo?theme=food)
-
-##### gelbooru
-
-![gelbooru](https://count.getloli.com/@demo?theme=gelbooru)
-
-##### green
-
-![green](https://count.getloli.com/@demo?theme=green)
-
-##### kasuterura-1
-
-![kasuterura-1](https://count.getloli.com/@demo?theme=kasuterura-1)
-
-##### kasuterura-2
-
-![kasuterura-2](https://count.getloli.com/@demo?theme=kasuterura-2)
-
-##### kasuterura-3
-
-![kasuterura-3](https://count.getloli.com/@demo?theme=kasuterura-3)
-
-##### kasuterura-4
-
-![kasuterura-4](https://count.getloli.com/@demo?theme=kasuterura-4)
-
-##### kyun
-
-![kyun](https://count.getloli.com/@demo?theme=kyun)
-
-##### love-and-deepspace
-
-![love-and-deepspace](https://count.getloli.com/@demo?theme=love-and-deepspace)
-
-##### miku
-
-![miku](https://count.getloli.com/@demo?theme=miku)
-
-##### minecraft
-
-![minecraft](https://count.getloli.com/@demo?theme=minecraft)
-
-##### moebooru
-
-![moebooru](https://count.getloli.com/@demo?theme=moebooru)
-
-##### morden-num
-
-![morden-num](https://count.getloli.com/@demo?theme=morden-num)
-
-##### nixietube-1
-
-![nixietube-1](https://count.getloli.com/@demo?theme=nixietube-1)
-
-##### nixietube-2
-
-![nixietube-2](https://count.getloli.com/@demo?theme=nixietube-2)
-
-##### normal-1
-
-![normal-1](https://count.getloli.com/@demo?theme=normal-1)
-
-##### normal-2
-
-![normal-2](https://count.getloli.com/@demo?theme=normal-2)
-
-##### original-new
-
-![original-new](https://count.getloli.com/@demo?theme=original-new)
-
-##### original-old
-
-![original-old](https://count.getloli.com/@demo?theme=original-old)
-
-##### rule34
-
-![rule34](https://count.getloli.com/@demo?theme=rule34)
-
-##### shimmie2
-
-![shimmie2](https://count.getloli.com/@demo?theme=shimmie2)
-
-##### sketch-1
-
-![sketch-1](https://count.getloli.com/@demo?theme=sketch-1)
-
-##### sketch-2
-
-![sketch-2](https://count.getloli.com/@demo?theme=sketch-2)
-
-##### yousa-ling
-
-![yousa-ling](https://count.getloli.com/@demo?theme=yousa-ling)
-
-</details>
-
-## Demo
-[https://count.getloli.com](https://count.getloli.com)
-
-## Sponsor / 赞助
-
-This service handles over **10 million** requests every month. If *Moe Counter!* has been useful to you, please consider sponsoring to help keep the server running. Every little bit helps! 💖
-
-*Moe Counter!* 每月处理超过 **1000万** 次请求。如果这个项目对你有帮助，恳请赞助支持服务器的持续运行，感谢每一份支持！
-
-- **Ko-fi**: https://ko-fi.com/journey_ad
-- **爱发电**: https://ifdian.net/a/journey-ad
-
-<details>
-<summary>Alipay / WeChat Pay（支付宝 / 微信支付）</summary>
-<p>
-  <img src="https://cdn.jsdelivr.net/gh/journey-ad/blog-img/about/alipay.jpg" alt="Alipay" width="200">
-  <img src="https://cdn.jsdelivr.net/gh/journey-ad/blog-img/about/wechatpay.jpg" alt="WeChat Pay" width="200">
+## ✨ 功能特性
+
+- **多种萌系主题**：内置 55 种数字图片主题，包括初音、A-SOUL、Minecraft、Capoo 等多种风格
+- **SVG 徽章输出**：每次请求动态生成 SVG 图片，数字图片内嵌 base64，无需额外静态资源请求
+- **内存优先计数**：计数在内存中自增，通过可配置间隔批量落库，对高并发友好
+- **多数据库支持**：SQLite（默认）、MongoDB、PostgreSQL（本 fork 新增）
+- **实时落库可选**：设置 `DB_INTERVAL=0` 即可每次请求实时写入，避免容器重启丢失计数
+- **参数丰富**：支持补零位数、间距、缩放、对齐、暗色模式、像素风格、前缀等
+- **零前端依赖**：只需在 HTML 中放一个 `<img>` 标签即可嵌入
+
+## 🌈 主题预览
+
+以下为部分主题效果，完整 55 种主题可访问 [在线 Demo](https://count.pyre-z.me) 切换查看，也欢迎在 [上游仓库](https://github.com/journey-ad/Moe-Counter) 提交新主题。
+
+<p align="center">
+  <img alt="moebooru" src="https://count.pyre-z.me/@demo?theme=moebooru">
+  <img alt="miku" src="https://count.pyre-z.me/@demo?theme=miku">
+  <img alt="minecraft" src="https://count.pyre-z.me/@demo?theme=minecraft">
+  <img alt="3d-num" src="https://count.pyre-z.me/@demo?theme=3d-num">
+  <img alt="asoul" src="https://count.pyre-z.me/@demo?theme=asoul">
+  <img alt="capoo-1" src="https://count.pyre-z.me/@demo?theme=capoo-1">
+  <img alt="sketch-1" src="https://count.pyre-z.me/@demo?theme=sketch-1">
+  <img alt="normal-1" src="https://count.pyre-z.me/@demo?theme=normal-1">
 </p>
-</details>
 
+## 🚀 快速开始
 
-## How to use
+### Docker Compose（推荐）
 
-For information on counter usage and configuration, refer to the [demo website](https://count.getloli.com).
-
-## Usage
-
-### Using Docker (Recommended)
-
-Pull the pre-built image from GitHub Container Registry:
+#### 使用 PostgreSQL（本 fork 支持）
 
 ```shell
-$ docker pull ghcr.io/journey-ad/moe-counter:latest
+# 1. 克隆本项目
+git clone https://github.com/pyre-z/Moe-Counter.git
+cd Moe-Counter
+
+# 2. 创建数据库（PostgreSQL 13+）
+# CREATE DATABASE moe_counter;
+
+# 3. 编写 deploy/.env（compose 的 env_file 是相对 compose 目录的）
+cat > deploy/.env <<'EOF'
+APP_PORT=3000
+APP_SITE=https://count.example.com
+DB_TYPE=postgres
+DB_URL=postgres://user:password@127.0.0.1:5432/moe_counter
+DB_INTERVAL=0
+LOG_LEVEL=info
+EOF
+
+# 4. 构建并启动
+docker compose -f deploy/docker-compose.yml up -d --build
 ```
 
-Run with Docker:
+> 本项目已附带 `deploy/docker-compose.yml`，默认挂载 `1panel-network` 网络以连接 1Panel PostgreSQL；若需在其他环境使用，请按需修改网络名与 `DB_URL`。
+
+#### 使用 SQLite（最简）
 
 ```shell
-$ docker run -d -p 3000:3000 \
+docker run -d -p 3000:3000 \
   -v $(pwd)/data:/app/data \
   -e APP_PORT=3000 \
   -e DB_TYPE=sqlite \
-  ghcr.io/journey-ad/moe-counter:latest
+  -e DB_INTERVAL=0 \
+  --name moe-counter \
+  moe-counter:local
 ```
 
-Or use docker-compose:
+### 从源码运行
 
-```yaml
-version: '3'
-services:
-  moe-counter:
-    image: ghcr.io/journey-ad/moe-counter:latest
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./data:/app/data
-    environment:
-      - APP_PORT=3000
-      - DB_TYPE=sqlite
-```
-
-### Deploying from Source
+要求 Node.js >= 22 与 pnpm >= 10。
 
 ```shell
-$ git clone https://github.com/journey-ad/Moe-Counter.git
-$ cd Moe-Counter
-$ pnpm install
+git clone https://github.com/pyre-z/Moe-Counter.git
+cd Moe-Counter
+pnpm install
 
-$ pnpm start
+# SQLite 模式
+pnpm start
+
+# 环境变量示例
+APP_PORT=3000 DB_TYPE=postgres DB_URL=postgres://user:password@127.0.0.1:5432/moe_counter pnpm start
 ```
 
-### Configuration
+### 部署到反向代理
 
-Set `.env` file to specify the environment variables. *[.env.example](./.env.example)*
+服务默认监听 `3000` 端口，反代配置示例：
 
-```dosini
-# Specify your website URL
-# APP_SITE=https://count.getloli.com
-
-# Application port
-APP_PORT=3000
-
-# Database type: either 'sqlite' or 'mongodb'
-DB_TYPE=sqlite
-
-# If using MongoDB, provide the connection string
-# DB_URL=mongodb://127.0.0.1:27017
-
-# Database write interval in seconds (0 for real-time)
-DB_INTERVAL=60
-
-# Log level: either 'debug' | 'info' | 'warn' | 'error' | 'none'
-LOG_LEVEL=debug
-
-# Google Analytics `G-Tag` ID
-# GA_ID=G-XXXX
+```nginx
+location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
 ```
 
-## Credits
+## ⚙️ 配置说明
 
-* [A-SOUL_Official](https://space.bilibili.com/703007996)
-* [moebooru](https://github.com/moebooru/moebooru)
-* gelbooru.com NSFW
-* [Icons8](https://icons8.com/icon/80355/star)
-* *And all booru site...*
+复制 `.env.example` 为 `.env` 并修改对应变量：
 
-## License
+| 变量 | 说明 | 默认值 |
+|------|------|--------|
+| `APP_PORT` | 服务监听端口 | `3000` |
+| `APP_SITE` | 站点地址，用于页面生成链接 | 请求 Host |
+| `DB_TYPE` | 数据库类型：`sqlite` / `mongodb` / `postgres` | `sqlite` |
+| `DB_URL` | 数据库连接串（MongoDB / PostgreSQL） | 本地默认地址 |
+| `DB_INTERVAL` | 批量落库间隔（秒），`0` 表示实时落库 | `60` |
+| `LOG_LEVEL` | 日志级别：`debug` / `info` / `warn` / `error` / `none` | `info` |
+| `GA_ID` | Google Analytics 站点 G-Tag ID（可选） | 空 |
 
-[MIT License](./LICENSE), excluding all themes
+## 📖 使用方法
 
----
+### 计数器图片
 
-<a href="https://star-history.com/?repos=journey-ad/Moe-Counter&type=Date#journey-ad/Moe-Counter&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=journey-ad/Moe-Counter&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=journey-ad/Moe-Counter&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=journey-ad/Moe-Counter&type=Date" />
- </picture>
-</a>
+请求格式：
+
+```
+https://count.pyre-z.me/@<counter-name>?theme=<theme>&padding=<n>&offset=<n>&scale=<n>&darkmode=<auto|0|1>
+```
+
+示例：
+
+```markdown
+![Moe Counter](https://count.pyre-z.me/@my-blog?theme=miku)
+```
+
+### 查询 JSON 数据（不会渲染图片）
+
+```shell
+curl https://count.pyre-z.me/record/@my-blog
+# {"name":"my-blog","num":42}
+```
+
+### 健康检查
+
+```shell
+curl https://count.pyre-z.me/heart-beat
+# alive
+```
+
+## 🗄️ 数据库说明
+
+PostgreSQL 表结构由应用启动时自动创建：
+
+```sql
+CREATE TABLE IF NOT EXISTS tb_count (
+    name VARCHAR(32) PRIMARY KEY,
+    num  BIGINT NOT NULL DEFAULT 0
+);
+```
+
+> 数据库变量 `DB_URL` 使用标准 PostgreSQL 连接串，例如：`postgres://user:password@127.0.0.1:5432/moe_counter`。
+
+## 📝 与上游的差异
+
+- 新增 `db/postgres.js`，支持 `DB_TYPE=postgres`
+- 新增 `deploy/docker-compose.yml` 与 `deploy/.env.template` 生产部署模板
+- README 中文文档与英文版（`README.en.md`）
+- 已移除上游 HelloGitHub 徽章与 Star History 徽章
+
+## 🙏 致谢
+
+- 上游作者 [journey-ad](https://github.com/journey-ad)
+- [A-SOUL_Official](https://space.bilibili.com/703007996)
+- [moebooru](https://github.com/moebooru/moebooru)
+- gelbooru.com NSFW
+- [Icons8](https://icons8.com/icon/80355/star)
+- 以及所有 booru 站点
+
+## 📄 开源协议
+
+本项目遵循 [MIT License](./LICENSE)，**但所有主题资源除外**（主题图片版权归原作者所有）。
