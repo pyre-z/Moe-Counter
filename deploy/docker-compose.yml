@@ -1,0 +1,30 @@
+services:
+  moe-counter:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: moe-counter:local
+    container_name: moe-counter
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3003:3000"
+    env_file:
+      - .env
+    networks:
+      - 1panel-network
+    # 健康检查：heart-beat 返回 alive
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/heart-beat').then(r=>{if(r.status!==200)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  1panel-network:
+    external: true
